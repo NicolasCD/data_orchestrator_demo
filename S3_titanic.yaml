@@ -1,0 +1,17 @@
+document:
+  dsl: '1.0.3'
+  namespace: S3_titanic
+  name: S3_titanic
+  version: 2.0.0
+
+do:
+  - import-dtr:
+      call: "serverless_function"
+      with:
+        id: "8090a9f3-cb2c-45ee-9e8a-567e5b29131e"
+        region: "fr-par"
+  - processing-dtr:
+      call: "serverless_job"
+      with:
+        id: "fb43b53c-27c1-4a51-818f-944882180f3f"
+        region: "fr-par"
