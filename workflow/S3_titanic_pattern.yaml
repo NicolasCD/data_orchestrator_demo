@@ -5,13 +5,13 @@ document:
   version: 2.0.0
 
 do:
-  - import-dtr:
+  - task1:
       call: "serverless_function"
       with:
-        id: "8090a9f3-cb2c-45ee-9e8a-567e5b29131e"
+        id: "function_1"
         region: "fr-par"
-  - processing-dtr:
+  - task2:
       call: "serverless_job"
       with:
-        id: "fb43b53c-27c1-4a51-818f-944882180f3f"
+        id: "function_2"
         region: "fr-par"

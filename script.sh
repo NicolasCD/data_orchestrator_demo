@@ -26,7 +26,7 @@ zip -r $f.zip handlers package
 CONTENT_LENGTH=$(du -b $f.zip | cut -f1)
 
 #Create function. Python 3.14 not dispo with "scw" cli
-ID=$(scw function function create \
+ID_FUNCTION1=$(scw function function create \
 namespace-id=$NAMESPACE \
 runtime=python313 \
 handler='handlers/get_file.handle' \
@@ -38,7 +38,7 @@ environment-variables.AWS_ENDPOINT_URL=$AWS_ENDPOINT_URL \
  | grep 'ID' | head -n1 | tr -s ' ' | cut -d' ' -f2)
 
 #Asking for upload URL
-URL=$(scw function function get-upload-url $ID content-length=$CONTENT_LENGTH | grep 'URL' | head -n1 | tr -s ' ' | cut -d' ' -f2)
+URL=$(scw function function get-upload-url $ID_FUNCTION1 content-length=$CONTENT_LENGTH | grep 'URL' | head -n1 | tr -s ' ' | cut -d' ' -f2)
 
 #Upload archive
 curl $URL \
@@ -47,11 +47,11 @@ curl $URL \
 --data-binary @$f.zip
 
 #Deploy
-scw function function deploy $ID
+scw function function deploy $ID_FUNCTION1
 
 #Wait status is "ready"
 while true; do
-    STATUS=$(scw function function get $ID | grep 'Status' | head -n1 | tr -s ' ' | cut -d' ' -f2)
+    STATUS=$(scw function function get $ID_FUNCTION1 | grep 'Status' | head -n1 | tr -s ' ' | cut -d' ' -f2)
 
     if [ "$STATUS" = "ready" ]; then
         echo $f deployed
@@ -76,7 +76,7 @@ zip -r $f.zip handlers package
 CONTENT_LENGTH=$(du -b $f.zip | cut -f1)
 
 #Create function. Python 3.14 not dispo with "scw" cli
-ID=$(scw function function create \
+ID_FUNCTION2=$(scw function function create \
 namespace-id=$NAMESPACE \
 runtime=python313 \
 handler='handlers/compute_file.handle' \
@@ -88,7 +88,7 @@ environment-variables.AWS_ENDPOINT_URL=$AWS_ENDPOINT_URL \
  | grep 'ID' | head -n1 | tr -s ' ' | cut -d' ' -f2)
 
 #Asking for upload URL
-URL=$(scw function function get-upload-url $ID content-length=$CONTENT_LENGTH | grep 'URL' | head -n1 | tr -s ' ' | cut -d' ' -f2)
+URL=$(scw function function get-upload-url $ID_FUNCTION2 content-length=$CONTENT_LENGTH | grep 'URL' | head -n1 | tr -s ' ' | cut -d' ' -f2)
 
 #Upload archive
 curl $URL \
@@ -97,11 +97,11 @@ curl $URL \
 --data-binary @$f.zip
 
 #Deploy
-scw function function deploy $ID
+scw function function deploy $ID_FUNCTION2
 
 #Wait status is "ready"
 while true; do
-    STATUS=$(scw function function get $ID | grep 'Status' | head -n1 | tr -s ' ' | cut -d' ' -f2)
+    STATUS=$(scw function function get $ID_FUNCTION2 | grep 'Status' | head -n1 | tr -s ' ' | cut -d' ' -f2)
 
     if [ "$STATUS" = "ready" ]; then
         echo $f deployed
@@ -111,6 +111,8 @@ while true; do
     fi
 done
 
+
+# Create Workflow
 
 
 
