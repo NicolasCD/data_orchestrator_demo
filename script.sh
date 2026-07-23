@@ -1,6 +1,5 @@
 #!/bin/bash
 
-<<<<<<< HEAD
 AWS_ACCESS_KEY_ID=''
 AWS_SECRET_ACCESS_KEY=''
 AWS_DEFAULT_REGION='fr-par'
@@ -28,58 +27,23 @@ CONTENT_LENGTH=$(du -b $f.zip | cut -f1)
 
 #Create function. Python 3.14 not dispo with "scw" cli
 ID_FUNCTION1=$(scw function function create \
-=======
-AWS_ACCESS_KEY_ID='SCWZXQANBYN3YSQ9MQR8'
-AWS_SECRET_ACCESS_KEY='b43c3ec5-998d-4677-80ba-491ac8cbb1ec'
-AWS_DEFAULT_REGION='fr-par'
-AWS_ENDPOINT_URL='http://s3.fr-par.scw.cloud'
-
-echo namespace creating
-#Create namespace
-NAMESPACE=$(scw function namespace create | grep 'ID' | head -n1 | tr -s ' ' | cut -d' ' -f2)
-#Wait creating namespace
-sleep 5
-
-#Function_1
-echo function_1 creating
-cd function_1
-PYTHON_VERSION=3.13 && docker run --rm -v .:/home/app/function --workdir /home/app/function rg.fr-par.scw.cloud/scwfunctionsruntimes-public/python-dep:$PYTHON_VERSION pip install -r requirements.txt --target ./package
-
-#Compress archive
-zip -r function_1.zip handlers package
-
-#Size of archive
-CONTENT_LENGTH=$(du -b function_1.zip | cut -f1)
-
-#Create function. Python 3.14 not dispo with "scw" cli
-ID=$(scw function function create \
->>>>>>> b5496b4 (WIP)
 namespace-id=$NAMESPACE \
 runtime=python313 \
 handler='handlers/get_file.handle' \
 environment-variables.AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
-<<<<<<< HEAD
 secret-environment-variables.0.key=AWS_SECRET_ACCESS_KEY \
 secret-environment-variables.0.value=$AWS_SECRET_ACCESS_KEY \
-=======
-environment-variables.AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
->>>>>>> b5496b4 (WIP)
 environment-variables.AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION \
 environment-variables.AWS_ENDPOINT_URL=$AWS_ENDPOINT_URL \
  | grep 'ID' | head -n1 | tr -s ' ' | cut -d' ' -f2)
 
 #Asking for upload URL
-<<<<<<< HEAD
 URL=$(scw function function get-upload-url $ID_FUNCTION1 content-length=$CONTENT_LENGTH | grep 'URL' | head -n1 | tr -s ' ' | cut -d' ' -f2)
-=======
-URL=$(scw function function get-upload-url $ID content-length=$CONTENT_LENGTH | grep 'URL' | head -n1 | tr -s ' ' | cut -d' ' -f2)
->>>>>>> b5496b4 (WIP)
 
 #Upload archive
 curl $URL \
 -X PUT \
 -H 'Content-Type: application/octet-stream' \
-<<<<<<< HEAD
 --data-binary @$f.zip
 
 #Deploy
@@ -91,19 +55,6 @@ while true; do
 
     if [ "$STATUS" = "ready" ]; then
         echo $f deployed
-=======
---data-binary @function_1.zip
-
-#Deploy
-scw function function deploy $ID
-
-#Wait status is "ready"
-while true; do
-    STATUS=$(scw function function get $ID | grep 'Status' | head -n1 | tr -s ' ' | cut -d' ' -f2)
-
-    if [ "$STATUS" = "ready" ]; then
-        echo Waiting deploying function_1
->>>>>>> b5496b4 (WIP)
         break
     else
         sleep 2
@@ -112,7 +63,6 @@ done
 
 
 
-<<<<<<< HEAD
 #Function_2
 echo function_2 creating
 f=function_2
@@ -165,8 +115,6 @@ done
 # Create Workflow
 
 
-=======
->>>>>>> b5496b4 (WIP)
 
 #Delete namespace
 #scw function namespace delete $NAMESPACE
