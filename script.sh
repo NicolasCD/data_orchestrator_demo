@@ -113,7 +113,11 @@ done
 
 
 # Create Workflow
-
+echo workflow creating
+cd "$wd"
+sed "s/function_1/$ID_FUNCTION1/g" ./workflow/S3_titanic_pattern.yaml > workflow.yaml
+sed -i "s/function_2/$ID_FUNCTION2/g" workflow.yaml
+scw-do-linux data-orchestrator definition create region=fr-par name="youpi" version-name="v1-0-0" yaml-content=@workflow.yaml
 
 
 #Delete namespace
