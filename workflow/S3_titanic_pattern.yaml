@@ -1,7 +1,7 @@
 document:
   dsl: '1.0.3'
-  namespace: S3_titanic
-  name: S3_titanic
+  namespace: S3-titanic
+  name: S3-titanic
   version: 2.0.0
 
 do:
@@ -10,8 +10,10 @@ do:
       with:
         id: "function_1"
         region: "fr-par"
+        method: "GET"
   - task2:
-      call: "serverless_job"
+      call: "serverless_function"
       with:
         id: "function_2"
         region: "fr-par"
+        method: "GET"
