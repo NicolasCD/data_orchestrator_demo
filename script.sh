@@ -5,6 +5,32 @@ AWS_SECRET_ACCESS_KEY=''
 AWS_DEFAULT_REGION='fr-par'
 AWS_ENDPOINT_URL='http://s3.fr-par.scw.cloud'
 
+usage() {
+  echo "Usage: $0 <--AWS_ACCESS_KEY_ID=AWS_ACCESS_KEY_ID> <--AWS_SECRET_ACCESS_KEY=AWS_SECRET_ACCESS_KEY> [-h|--help]"
+  exit 1
+}
+
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --AWS_ACCESS_KEY_ID=*)
+      AWS_ACCESS_KEY_ID="${1#*=}"
+      shift 1
+      ;;
+    --AWS_SECRET_ACCESS_KEY=*)
+      AWS_SECRET_ACCESS_KEY="${1#*=}"
+      shift 1
+      ;;
+    -h|--help)
+      usage
+      ;;
+    *)
+      echo "Erreur : Option inconnue '$1'"
+      usage
+      ;;
+  esac
+done
+
 wd=$(pwd)
 
 echo namespace creating
