@@ -139,8 +139,10 @@ done
 
 
 # Delete workflow if exists 
+echo "Check if worflow 'example-titanic' exists then delete it"
 ID_WORKFLOW=$(scw-do-linux data-orchestrator definition list region=fr-par | grep example-titanic | cut -d' ' -f1)
 if [ "$ID_WORKFLOW" != "" ]; then
+    echo "Deleting workflow 'example-titanic' - $ID_WORKFLOW"
     scw-do-linux data-orchestrator definition delete workflow-definition-id=$ID_WORKFLOW region=fr-par
 fi
 

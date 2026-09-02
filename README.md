@@ -14,12 +14,14 @@ Show stats.
 
 ### Tools 
 * Linux
-* Docker
-* Zip
-* Curl
-* Scw
-* Scw-do
+* Docker (https://docs.docker.com/engine/install/)
+* Zip (apt install zip unzip)
+* Curl (apt install curl)
+* Scw (https://github.com/scaleway/scaleway-cli)
+* Scw-do (<lien> + add to $PATH)
+
 ### Rights
+* Configurated scw
 * Serverless Functions read/write
 * Data Orchestrator read/write
 * Object storage read/write
