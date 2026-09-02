@@ -5,6 +5,32 @@ AWS_SECRET_ACCESS_KEY=''
 AWS_DEFAULT_REGION='fr-par'
 AWS_ENDPOINT_URL='http://s3.fr-par.scw.cloud'
 
+usage() {
+  echo "Usage: $0 <--AWS_ACCESS_KEY_ID=AWS_ACCESS_KEY_ID> <--AWS_SECRET_ACCESS_KEY=AWS_SECRET_ACCESS_KEY> [-h|--help]"
+  exit 1
+}
+
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --AWS_ACCESS_KEY_ID=*)
+      AWS_ACCESS_KEY_ID="${1#*=}"
+      shift 1
+      ;;
+    --AWS_SECRET_ACCESS_KEY=*)
+      AWS_SECRET_ACCESS_KEY="${1#*=}"
+      shift 1
+      ;;
+    -h|--help)
+      usage
+      ;;
+    *)
+      echo "Erreur : Option inconnue '$1'"
+      usage
+      ;;
+  esac
+done
+
 wd=$(pwd)
 
 echo namespace creating
@@ -113,8 +139,10 @@ done
 
 
 # Delete workflow if exists 
+echo "Check if worflow 'example-titanic' exists then delete it"
 ID_WORKFLOW=$(scw-do-linux data-orchestrator definition list region=fr-par | grep example-titanic | cut -d' ' -f1)
 if [ "$ID_WORKFLOW" != "" ]; then
+    echo "Deleting workflow 'example-titanic' - $ID_WORKFLOW"
     scw-do-linux data-orchestrator definition delete workflow-definition-id=$ID_WORKFLOW region=fr-par
 fi
 
@@ -123,13 +151,22 @@ echo workflow creating
 cd "$wd"
 sed "s/function_1/$ID_FUNCTION1/g" ./workflow/S3_titanic_pattern.yaml > workflow.yaml
 sed -i "s/function_2/$ID_FUNCTION2/g" workflow.yaml
-scw-do-linux data-orchestrator definition create region=fr-par name="example-titanic" version-name="v1-0-0" yaml-content=@workflow.yaml
- 
- 
+ID_WORKFLOW=$(scw-do-linux data-orchestrator definition create region=fr-par name="example-titanic" version-name="v1-0-0" yaml-content=@workflow.yaml | grep 'ID' | head -n1 | tr -s ' ' | cut -d' ' -f2)
+
+#Run workflow
+echo -e Run the workflow :\\n\
+\$scw-do-linux data-orchestrator definition start region=fr-par workflow-definition-id=$ID_WORKFLOW\\n
+
+#Follow Workflow
+echo -e Follow execution of the workflow :\\n\
+\$watch scw-do-linux data-orchestrator run get region=fr-par workflow-run-id=\<RunID\>\\n\
+or on browser : \\n\
+https://console.scaleway.com/data-orchestrator/fr-par/workflows/$ID_WORKFLOW/runs
 
 #Delete workflow
-# scw-do-linux data-orchestrator definition delete workflow-definition-id=$ID_WORKFLOW region=fr-par
-
+echo -e Delete the workflow :\\n\
+\$scw-do-linux data-orchestrator definition delete region=fr-par workflow-definition-id=$ID_WORKFLOW\\n
 
 #Delete namespace
-#scw function namespace delete $NAMESPACE
+echo -e Delete the namespace :\\n\
+\$scw function namespace delete $NAMESPACE
