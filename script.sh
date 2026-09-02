@@ -6,7 +6,7 @@ AWS_DEFAULT_REGION='fr-par'
 AWS_ENDPOINT_URL='http://s3.fr-par.scw.cloud'
 
 usage() {
-  echo "Usage: $0 <--AWS_ACCESS_KEY_ID=AWS_ACCESS_KEY_ID> <--AWS_SECRET_ACCESS_KEY=AWS_SECRET_ACCESS_KEY> [-h|--help]"
+  echo "Usage: $0 --AWS_ACCESS_KEY_ID=AWS_ACCESS_KEY_ID --AWS_SECRET_ACCESS_KEY=AWS_SECRET_ACCESS_KEY [-h|--help]"
   exit 1
 }
 
